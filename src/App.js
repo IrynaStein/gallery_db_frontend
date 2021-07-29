@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useEffect, useState } from "react";
+import { Route } from "react-router-dom";
+import ArtworkPage from "./ArtworkPage";
+import CollectorPage from "./CollectorPage";
+import NavBar from "./NavBar";
 
 function App() {
+  const [artworks, setArtworks] = useState([]);
+  const [categories, setCategories] = useState([])
+
+  useEffect(() => {
+    fetch("http://localhost:9393/artworks")
+      .then((resp) => resp.json())
+      .then((data) => {
+        setArtworks(data.artworks)
+        setCategories(data.categories)
+      })
+  }, []);
+
+  console.log(artworks);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <NavBar />
+      <Route exact path="/artworks">
+        <ArtworkPage artworks={artworks} categories={categories}/>
+      </Route>
+      <Route exact path="/collectors">
+        <CollectorPage/>
+      </Route>
     </div>
+    
   );
 }
 
 export default App;
+
