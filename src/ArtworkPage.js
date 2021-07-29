@@ -1,13 +1,15 @@
 import { useState } from "react";
 import Artwork from "./Artwork";
+import { NavLink } from "react-router-dom";
 
-function ArtworksPage({ artworks, categories }) {
+function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
   const defaultForm = {
     title: "",
     category: "",
     date_created: 0,
     edition: 0,
     price: 0,
+    image: "",
     likes: 0,
     featured: false,
     medium: "",
@@ -17,7 +19,7 @@ function ArtworksPage({ artworks, categories }) {
   console.log(categories);
 
   const renderArtworks = artworks.map((artwork) => (
-    <Artwork key={artwork.id} artwork={artwork} />
+    <Artwork key={artwork.id} artwork={artwork} onDelete={onDelete} />
   ));
 
   const renderCategories = categories.map((category) => (
@@ -44,7 +46,7 @@ function ArtworksPage({ artworks, categories }) {
   function handleSubmit(e) {
     e.preventDefault();
     setFormData(formData);
-    console.log(formData);
+
     const configObj = {
       method: "POST",
       headers: { "Content-type": "application/json" },
@@ -62,7 +64,10 @@ function ArtworksPage({ artworks, categories }) {
     };
     fetch("http://localhost:9393/artworks", configObj)
       .then((resp) => resp.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        onAddNew(data);
+        console.log(data);
+      });
     setFormData(defaultForm);
   }
 
@@ -170,15 +175,26 @@ function ArtworksPage({ artworks, categories }) {
                 rows={3}
                 value={formData.medium}
               />
+              <div className="field">
+                <label>Do you want to assign a collector?</label>
+                <div className="ui mini buttons">
+                  <NavLink to="/collectors" className="ui button">Enter new</NavLink>
+                  <div className="or" />
+                  <div className="ui button"onClick={()=> console.log("bye")}>Assign existing</div>
+                </div>
+              </div>
             </div>
             <button className="ui submit button">Submit</button>
           </form>
+          <div className="ui horizontal divider">OR</div>
         </div>
-        <div className="column" style={{ overflow: "auto", maxHeight: 400 }}>
+        <div className="column" style={{ overflow: "auto", maxHeight: 600 }}>
           {renderArtworks}
         </div>
       </div>
-      <div className="ui vertical divider">OR</div>
+      <div className="ui vertical divider">
+        <i className="list ul icon"></i>
+      </div>
     </div>
   );
 }

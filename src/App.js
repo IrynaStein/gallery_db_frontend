@@ -18,13 +18,25 @@ function App() {
       })
   }, []);
 
-  console.log(artworks);
+  console.log(artworks)
+
+  function onAddNew (data){
+    setArtworks([...artworks, data.artwork])
+  }
+
+  function onDelete(artwork){
+    console.log(artwork.id)
+    fetch(`http://localhost:9393/artworks/${artwork.id}`,{
+    method: "DELETE"})
+    const deletedArtworks = artworks.filter((a) => a.id !== artwork.id)
+    setArtworks(deletedArtworks)
+  }
 
   return (
     <div>
       <NavBar />
       <Route exact path="/artworks">
-        <ArtworkPage artworks={artworks} categories={categories}/>
+        <ArtworkPage artworks={artworks} categories={categories} onAddNew={onAddNew} onDelete={onDelete}/>
       </Route>
       <Route exact path="/collectors">
         <CollectorPage/>
