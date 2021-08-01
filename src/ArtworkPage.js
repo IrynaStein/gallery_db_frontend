@@ -3,13 +3,10 @@ import Artwork from "./Artwork";
 // import { NavLink } from "react-router-dom";
 
 function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
-  const [collectorList, setCollectorList] = useState([])
-  const [categoryList, setCategoryList] = useState([])
-  // const [currentArtwork1, setCurrentArtwork1] = useState({})
-  const [currentArtwork, setCurrentArtwork] = useState({})
-  // console.log(collectorList)
-  // console.log(currentArtwork)
-  // console.log(categoryList)
+  const [collectorList, setCollectorList] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
+  const [currentArtwork, setCurrentArtwork] = useState({});
+
   const defaultForm = {
     title: "",
     category: "",
@@ -33,49 +30,68 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
     />
   ));
 
-  const mappedCollectors = collectorList.map((collector) => 
-   <div key={collector.id}>
-      <p><span style={{color: "rgba(33, 133, 208, 100)"}}><b>{collector.name}</b></span>: collector id# <b>{collector.id}.</b>&nbsp;
-      {collector.name.split(' ')[0]} also owns these works: <b>{collector.collection.map((a,i) => (i + 1)+". "+a.title + " ")}</b></p>
-      </div>
-  )
-const mappedCategories = categoryList.map((cat, ind) => {
-  if (ind === 0){
-    return <p>{cat.name}&nbsp;&nbsp;
-    <i className="yellow star icon"></i>
-    <i className="yellow star icon"></i>
-    <i className="yellow star icon"></i>
-    <i className="yellow star icon"></i>
-    <i className="yellow star icon"></i>
-    </p>
-  }
-  else if (ind === 1){
-    return <p>{cat.name}&nbsp;&nbsp;
-    <i className="yellow star icon"></i>
-    <i className="yellow star icon"></i>
-    <i className="yellow star icon"></i>
-    <i className="yellow star icon"></i>
-    </p>
-  }
-  else if (ind === 2){
-    return <p>{cat.name}&nbsp;&nbsp;
-    <i className="yellow star icon"></i>
-    <i className="yellow star icon"></i>
-    <i className="yellow star icon"></i>
-    </p>
-  }
-  else if (ind === 3){
-    return <p>{cat.name}&nbsp;&nbsp;
-    <i className="yellow star icon"></i>
-    <i className="yellow star icon"></i>
-    </p>
-  }
-  else {
-    return <p>{cat.name}&nbsp;&nbsp;
-    <i className="yellow star icon"></i>
-    </p>
-  }
-})
+  const mappedCollectors = collectorList.map((collector) => (
+    <div key={collector.id}>
+      <p>
+        <span style={{ color: "rgba(33, 133, 208, 100)" }}>
+          <b>{collector.name}</b>
+        </span>
+        : collector id# <b>{collector.id}.</b>&nbsp;
+        {collector.name.split(" ")[0]} also owns these works:{" "}
+        <b>
+          {collector.collection.map((a, i) => i + 1 + ". " + a.title + " ")}
+        </b>
+      </p>
+    </div>
+  ));
+  const mappedCategories = categoryList.map((cat, ind) => {
+    if (ind === 0) {
+      return (
+        <p key={cat.name}>
+          {cat.name}&nbsp;&nbsp;
+          <i className="yellow star icon"></i>
+          <i className="yellow star icon"></i>
+          <i className="yellow star icon"></i>
+          <i className="yellow star icon"></i>
+          <i className="yellow star icon"></i>
+        </p>
+      );
+    } else if (ind === 1) {
+      return (
+        <p key={cat.name}>
+          {cat.name}&nbsp;&nbsp;
+          <i className="yellow star icon"></i>
+          <i className="yellow star icon"></i>
+          <i className="yellow star icon"></i>
+          <i className="yellow star icon"></i>
+        </p>
+      );
+    } else if (ind === 2) {
+      return (
+        <p key={cat.name}>
+          {cat.name}&nbsp;&nbsp;
+          <i className="yellow star icon"></i>
+          <i className="yellow star icon"></i>
+          <i className="yellow star icon"></i>
+        </p>
+      );
+    } else if (ind === 3) {
+      return (
+        <p key={cat.name}>
+          {cat.name}&nbsp;&nbsp;
+          <i className="yellow star icon"></i>
+          <i className="yellow star icon"></i>
+        </p>
+      );
+    } else {
+      return (
+        <p key={cat.name}>
+          {cat.name}&nbsp;&nbsp;
+          <i className="yellow star icon"></i>
+        </p>
+      );
+    }
+  });
 
   const renderCategories = categories.map((category) => (
     <option key={category.id} value={category.name}>
@@ -84,41 +100,34 @@ const mappedCategories = categoryList.map((cat, ind) => {
   ));
 
   function showCollectors(artwork) {
-    setCategoryList([])
-    console.log(artwork)
+    setCategoryList([]);
     fetch(`http://localhost:9393/artworks/${artwork.id}`)
-    .then(resp => resp.json())
-    .then(data => {
-      setCollectorList(data.collector_list)
-      console.log(data)
-    })
-    setCurrentArtwork(artwork)
+      .then((resp) => resp.json())
+      .then((data) => {
+        setCollectorList(data.collector_list);
+      });
+    setCurrentArtwork(artwork);
   }
 
-  function showCategories(artwork){
-    setCollectorList([])
-    console.log(artwork)
+  function showCategories(artwork) {
+    setCollectorList([]);
     fetch(`http://localhost:9393/artworks/showcategories/${artwork.id}`)
-    .then(resp => resp.json())
-    .then(data => {
-      console.log(data)
-      setCategoryList(data.cat_popularity)
-    })
-setCurrentArtwork(artwork)
+      .then((resp) => resp.json())
+      .then((data) => {
+        setCategoryList(data.cat_popularity);
+      });
+    setCurrentArtwork(artwork);
   }
 
   function handleChange(e) {
-    console.log(e.target.value);
     setFormData({ ...formData, [e.target.name]: e.target.value });
   }
 
   function handleChecked(e) {
-    console.log(e.target.checked);
     setFormData({ ...formData, featured: e.target.checked });
   }
 
   function handleCatChange(e) {
-    console.log(e.target.name, e.target.value);
     setFormData({ ...formData, category: e.target.value });
   }
 
@@ -144,11 +153,10 @@ setCurrentArtwork(artwork)
       .then((resp) => resp.json())
       .then((data) => {
         onAddNew(data);
-        console.log(data);
       });
-    // setFormData(defaultForm);
+    setFormData(defaultForm);
   }
-  
+
   return (
     <div className="ui segment">
       <div className="ui two column stakable grid">
@@ -156,7 +164,7 @@ setCurrentArtwork(artwork)
           <i className="list ul icon"></i>
         </div>
         <div className="column">
-        <div className="ui center aligned basic segment">
+          <div className="ui center aligned basic segment">
             <div className="ui icon header">
               <i className="image outline icon" />
               New Artwork
@@ -286,8 +294,27 @@ setCurrentArtwork(artwork)
           >
             {renderArtworks}
           </div>
-          {collectorList.length > 0 ? <div className="ui inverted segment"><b>{currentArtwork.title} artworks has been collected by: </b><p/>{mappedCollectors}</div> : null}
-          {categoryList.length > 0 ? <div className="ui inverted segment"><b>{currentArtwork.title} artwork belongs to: <span style={{color: "rgba(251, 189, 10, 100"}} >{currentArtwork.category.toUpperCase()} </span> category</b><p/><p>Categories popularity breakdown below:</p> <p>{mappedCategories}</p></div> : null}
+          {collectorList.length > 0 ? (
+            <div className="ui inverted segment">
+              <b>{currentArtwork.title} artworks has been collected by: </b>
+              <p />
+              {mappedCollectors}
+            </div>
+          ) : null}
+          {categoryList.length > 0 ? (
+            <div className="ui inverted segment">
+              <b>
+                {currentArtwork.title} artwork belongs to:{" "}
+                <span style={{ color: "rgba(251, 189, 10, 100" }}>
+                  {currentArtwork.category.toUpperCase()}{" "}
+                </span>{" "}
+                category
+              </b>
+              <p />
+              <p>Categories popularity breakdown below:</p>{" "}
+              <p>{mappedCategories}</p>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

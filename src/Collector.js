@@ -1,5 +1,4 @@
 function Collector({ collector, showArtworks, onCollectorDelete }) {
-
   const { first_name, last_name, email, address, phone, id } = collector;
 
   return (
@@ -36,25 +35,27 @@ function Collector({ collector, showArtworks, onCollectorDelete }) {
         <i
           className="trash alternate outline icon"
           style={{ cursor: "pointer" }}
-          onClick={collector.id !== 1111 ? () => onCollectorDelete(collector) : null}
+          onClick={
+            collector.id !== 1111 ? () => onCollectorDelete(collector) : null
+          }
         ></i>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <i className="edit outline icon" 
+        {/* <i className="edit outline icon" 
         style={{ cursor: "pointer" }} 
         onClick={collector.id !== 1111 ? () => console.log("edit collector info") : null}
         />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
         <i
           className="images outline icon"
           style={{ cursor: "pointer" }}
-          onClick={ collector.id !== 1111? () => showArtworks(collector): null}
+          onClick={collector.id !== 1111 ? () => showArtworks(collector) : null}
         />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <i
+        {/* <i
           className="chart line icon"
           style={{ cursor: "pointer" }}
           onClick={collector.id !== 1111 ? () => console.log("show stats") : null}
-        />
+        /> */}
       </div>
     </div>
   );

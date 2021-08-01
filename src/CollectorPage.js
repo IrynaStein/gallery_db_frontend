@@ -85,22 +85,23 @@ function CollectorPage() {
     ));
 
   function showArtworks(collector) {
-    console.log(collector.id);
     fetch(`http://localhost:9393/collectors/${collector.id}`)
       .then((resp) => resp.json())
       .then((data) => {
         setCollectorArtworks(data.artworks);
-        console.log(data.artworks);
       });
   }
   const mappedArtworksByCollector = collectorArtworks.map((artwork, i) => (
-    <div>
-        {i + 1}. <span style={{color: "rgba(33, 133, 208, 100)"}}><b>{artwork.title}</b> </span>, category: {artwork.category}
+    <div key={artwork.id}>
+      {i + 1}.{" "}
+      <span style={{ color: "rgba(33, 133, 208, 100)" }}>
+        <b>{artwork.title}</b>{" "}
+      </span>
+      , category: {artwork.category}
     </div>
   ));
 
   function onCollectorDelete(coll) {
-    console.log(coll.id);
     fetch(`http://localhost:9393/collectors/${coll.id}`, {
       method: "DELETE",
     });
@@ -234,9 +235,13 @@ function CollectorPage() {
               </div>
 
               <div className="ui left aligned inverted segment">
-                {collectorArtworks.length > 0
-                  ? <p>Artworks in this collection: {mappedArtworksByCollector}</p>
-                  : "Choose a collector to see more details"}
+                {collectorArtworks.length > 0 ? (
+                  <p>
+                    Artworks in this collection: {mappedArtworksByCollector}
+                  </p>
+                ) : (
+                  "Choose a collector to see more details"
+                )}
               </div>
             </div>
           </div>
