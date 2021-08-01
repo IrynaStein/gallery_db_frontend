@@ -18,7 +18,7 @@ function App() {
       })
   }, []);
 
-  console.log(artworks)
+  // console.log(artworks)
 
   function onAddNew (data){
     setArtworks([...artworks, data.artwork])
