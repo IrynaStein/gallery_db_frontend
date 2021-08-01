@@ -40,11 +40,11 @@ function Artwork({ artwork, onDelete, showCollectors, showCategories }) {
               onClick={() => onDelete(artwork)}
             ></i>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <i
+            {/* <i
               className="blue edit outline icon"
               style={{ cursor: "pointer" }}
             ></i>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
             <i
               className="blue users icon"
               style={{ cursor: "pointer" }}
