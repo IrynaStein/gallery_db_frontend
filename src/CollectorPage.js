@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 function CollectorPage() {
   const [collectors, setCollectors] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [collectorArtworks, setCollectorArtworks] = useState([])
+  const [collectorArtworks, setCollectorArtworks] = useState([]);
 
   const defaultForm = {
     first_name: "",
@@ -28,10 +28,7 @@ function CollectorPage() {
     },
   ];
   const mappedDefault = defaultCollector.map((collector) => (
-    <Collector
-      collector={collector}
-      key={collector.id}
-    />
+    <Collector collector={collector} key={collector.id} />
   ));
 
   useEffect(() => {
@@ -68,8 +65,8 @@ function CollectorPage() {
     };
     fetch("http://localhost:9393/collectors", configObj)
       .then((resp) => resp.json())
-      .then((data) => setCollectors([...collectors, data.collector]))
-      // setFormData(defaultForm)
+      .then((data) => setCollectors([...collectors, data.collector]));
+    setFormData(defaultForm);
   }
 
   const searchedCollectors = collectors
@@ -87,21 +84,28 @@ function CollectorPage() {
       />
     ));
 
-function showArtworks(collector) {
+  function showArtworks(collector) {
     console.log(collector.id);
     fetch(`http://localhost:9393/collectors/${collector.id}`)
       .then((resp) => resp.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        setCollectorArtworks(data.artworks);
+        console.log(data.artworks);
+      });
   }
-  const mappedArtworksByCollector = collectorArtworks.map((artwork) => <div>{artwork.title}</div>)
-  
-  
-  function onCollectorDelete(coll){
+  const mappedArtworksByCollector = collectorArtworks.map((artwork, i) => (
+    <div>
+        {i + 1}. <span style={{color: "rgba(33, 133, 208, 100)"}}><b>{artwork.title}</b> </span>, category: {artwork.category}
+    </div>
+  ));
+
+  function onCollectorDelete(coll) {
     console.log(coll.id);
-    fetch(`http://localhost:9393/collectors/${coll.id}`,{
-    method: "DELETE"})
-    const deletedCollectors = collectors.filter((c) => c.id !== coll.id)
-    setCollectors(deletedCollectors)
+    fetch(`http://localhost:9393/collectors/${coll.id}`, {
+      method: "DELETE",
+    });
+    const deletedCollectors = collectors.filter((c) => c.id !== coll.id);
+    setCollectors(deletedCollectors);
   }
 
   return (
@@ -228,8 +232,12 @@ function showArtworks(collector) {
               >
                 {searchTerm.length > 0 ? searchedCollectors : mappedDefault}
               </div>
-              {collectorArtworks >0? {mappedArtworksByCollector} : null}
-              <div className="ui inverted segment">Colelctor's stats</div>
+
+              <div className="ui left aligned inverted segment">
+                {collectorArtworks.length > 0
+                  ? <p>Artworks in this collection: {mappedArtworksByCollector}</p>
+                  : "Choose a collector to see more details"}
+              </div>
             </div>
           </div>
         </div>
