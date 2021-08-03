@@ -3,10 +3,10 @@ import { Input } from "semantic-ui-react";
 import { useEffect, useState } from "react";
 
 function CollectorPage({artworks}) {
-  const {title, id} = artworks
   const [collectors, setCollectors] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [collectorArtworks, setCollectorArtworks] = useState([]);
+  const [a, setA] = useState([])
 
   const defaultForm = {
     first_name: "",
@@ -14,7 +14,7 @@ function CollectorPage({artworks}) {
     email: "",
     address: "",
     phone: "",
-    art_id: [],
+    art_id: a
   };
   const [formData, setFormData] = useState(defaultForm);
 
@@ -53,31 +53,33 @@ function CollectorPage({artworks}) {
   }
 
   function dataListChange(e){
-    console.log(e.target.value)
+    setA ([...a, e.target.value])
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log("hello");
-    const configObj = {
-      method: "POST",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify({
-        first_name: formData.first_name,
-        last_name: formData.last_name,
-        email: formData.email,
-        address: formData.address,
-        phone: formData.phone,
-        // line 62 change to send an array of all art id's
-        art_id_1: parseInt(formData.art_id_1),
-      }),
-    };
-    fetch("http://localhost:9393/collectors", configObj)
-      .then((resp) => resp.json())
-      .then((data) => setCollectors([...collectors, data.collector]));
-    setFormData(defaultForm);
+    setFormData({...formData, art_id: a})
+    console.log(a)
+    // console.log("hello");
+    // const configObj = {
+    //   method: "POST",
+    //   headers: { "Content-type": "application/json" },
+    //   body: JSON.stringify({
+    //     first_name: formData.first_name,
+    //     last_name: formData.last_name,
+    //     email: formData.email,
+    //     address: formData.address,
+    //     phone: formData.phone,
+    //     // line 62 change to send an array of all art id's
+    //     art_id: a,
+    //   }),
+    // };
+    // fetch("http://localhost:9393/collectors", configObj)
+    //   .then((resp) => resp.json())
+    //   .then((data) => setCollectors([...collectors, data.collector]));
+    // setFormData(defaultForm);
   }
-
+console.log(formData)
   const searchedCollectors = collectors
     .filter(
       (collector) =>
@@ -211,13 +213,21 @@ function CollectorPage({artworks}) {
             </div> */}
              <div className="two fields">
             <div className="field">
-              <Input list="artworks" name="art_id" placeholder="Choose artwork..." onChange={(e)=>dataListChange(e)}/>
+            <label>Artwork owned *</label>
+              <Input list="artworks" 
+              name="art_id" 
+              placeholder="Choose artwork..." 
+              onChange={(e)=>dataListChange(e)}/>
               <datalist id="artworks">
               {mappedArtworks}
               </datalist>
             </div>
             <div className="field">
-              <Input list="artworks" name="art_id" placeholder="Choose artwork..." onChange={(e)=>dataListChange(e)}/>
+            <label>Artwork owned *</label>
+              <Input list="artworks" 
+              name="art_id" 
+              placeholder="Choose artwork..." 
+              onChange={(e)=>dataListChange(e)}/>
               <datalist id="artworks">
               {mappedArtworks}
               </datalist>
