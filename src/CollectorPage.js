@@ -1,7 +1,9 @@
 import Collector from "./Collector";
+import { Input } from "semantic-ui-react";
 import { useEffect, useState } from "react";
 
-function CollectorPage() {
+function CollectorPage({artworks}) {
+  const {title, id} = artworks
   const [collectors, setCollectors] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [collectorArtworks, setCollectorArtworks] = useState([]);
@@ -12,8 +14,7 @@ function CollectorPage() {
     email: "",
     address: "",
     phone: "",
-    art_id_1: 0,
-    art_id_2: 0,
+    art_id: [],
   };
   const [formData, setFormData] = useState(defaultForm);
 
@@ -31,6 +32,10 @@ function CollectorPage() {
     <Collector collector={collector} key={collector.id} />
   ));
 
+  const mappedArtworks = artworks.map((aw) => (
+    <option key={aw.id} value={aw.title}>{aw.title}</option>
+  ))
+
   useEffect(() => {
     fetch("http://localhost:9393/collectors")
       .then((resp) => resp.json())
@@ -47,6 +52,10 @@ function CollectorPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   }
 
+  function dataListChange(e){
+    console.log(e.target.value)
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     console.log("hello");
@@ -59,8 +68,8 @@ function CollectorPage() {
         email: formData.email,
         address: formData.address,
         phone: formData.phone,
+        // line 62 change to send an array of all art id's
         art_id_1: parseInt(formData.art_id_1),
-        art_id_2: parseInt(formData.art_id_2),
       }),
     };
     fetch("http://localhost:9393/collectors", configObj)
@@ -178,7 +187,7 @@ function CollectorPage() {
                 />
               </div>
             </div>
-            <div className="five fields">
+            {/* <div className="five fields">
               <div className="field">
                 <label>Artwork ID*</label>
                 <input
@@ -199,6 +208,20 @@ function CollectorPage() {
                   value={formData.art_id_2}
                 />
               </div>
+            </div> */}
+             <div className="two fields">
+            <div className="field">
+              <Input list="artworks" name="art_id" placeholder="Choose artwork..." onChange={(e)=>dataListChange(e)}/>
+              <datalist id="artworks">
+              {mappedArtworks}
+              </datalist>
+            </div>
+            <div className="field">
+              <Input list="artworks" name="art_id" placeholder="Choose artwork..." onChange={(e)=>dataListChange(e)}/>
+              <datalist id="artworks">
+              {mappedArtworks}
+              </datalist>
+            </div>
             </div>
             <button className="ui submit button">Submit</button>
           </form>
@@ -236,9 +259,9 @@ function CollectorPage() {
 
               <div className="ui left aligned inverted segment">
                 {collectorArtworks.length > 0 ? (
-                  <p>
+                  <div>
                     Artworks in this collection: {mappedArtworksByCollector}
-                  </p>
+                  </div>
                 ) : (
                   "Choose a collector to see more details"
                 )}

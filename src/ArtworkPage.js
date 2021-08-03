@@ -111,7 +111,7 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
 
   function showCategories(artwork) {
     setCollectorList([]);
-    fetch(`http://localhost:9393/artworks/showcategories/${artwork.id}`)
+    fetch(`http://localhost:9393/artworks/${artwork.id}/showcategories`)
       .then((resp) => resp.json())
       .then((data) => {
         setCategoryList(data.cat_popularity);
@@ -312,7 +312,7 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
               </b>
               <p />
               <p>Categories popularity breakdown below:</p>{" "}
-              <p>{mappedCategories}</p>
+              {mappedCategories}
             </div>
           ) : null}
         </div>

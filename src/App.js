@@ -42,7 +42,7 @@ function App() {
         />
       </Route>
       <Route exact path="/collectors">
-        <CollectorPage />
+        <CollectorPage artworks={artworks}/>
       </Route>
     </div>
   );
