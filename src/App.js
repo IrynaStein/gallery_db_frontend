@@ -10,7 +10,7 @@ function App() {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:9393/artworks")
+    fetch("https://limitless-reaches-06090.herokuapp.com/artworks")
       .then((resp) => resp.json())
       .then((data) => {
         setArtworks(data.artworks);

@@ -3,7 +3,6 @@ import { Input } from "semantic-ui-react";
 import { useEffect, useState } from "react";
 
 function CollectorPage({artworks}) {
-  console.log(artworks)
   const [collectors, setCollectors] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [collectorArtworks, setCollectorArtworks] = useState([]);
@@ -53,9 +52,6 @@ function CollectorPage({artworks}) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   }
 
-
-console.log(formData)
-
   function handleSubmit(e) {
     e.preventDefault();
 
@@ -69,7 +65,6 @@ console.log(formData)
         email: formData.email,
         address: formData.address,
         phone: formData.phone,
-        // line 62 change to send an array of all art id's
         art_id: [formData.art_id_1, formData.art_id_2]
       }),
     };
@@ -189,28 +184,6 @@ console.log(formData)
                 />
               </div>
             </div>
-            {/* <div className="five fields">
-              <div className="field">
-                <label>Artwork ID*</label>
-                <input
-                  onChange={(e) => handleFormChange(e)}
-                  placeholder="artwork id#1"
-                  type="number"
-                  name="art_id_1"
-                  value={formData.art_id_1}
-                />
-              </div>
-              <div className="field">
-                <label>Artwork ID*</label>
-                <input
-                  onChange={(e) => handleFormChange(e)}
-                  placeholder="artwork id#2"
-                  type="number"
-                  name="art_id_2"
-                  value={formData.art_id_2}
-                />
-              </div>
-            </div> */}
              <div className="two fields">
             <div className="field">
             <label>Artwork owned *</label>
