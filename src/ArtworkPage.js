@@ -49,45 +49,45 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
       return (
         <p key={cat.name}>
           {cat.name}&nbsp;&nbsp;
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
         </p>
       );
     } else if (ind === 1) {
       return (
         <p key={cat.name}>
           {cat.name}&nbsp;&nbsp;
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
         </p>
       );
     } else if (ind === 2) {
       return (
         <p key={cat.name}>
           {cat.name}&nbsp;&nbsp;
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
         </p>
       );
     } else if (ind === 3) {
       return (
         <p key={cat.name}>
           {cat.name}&nbsp;&nbsp;
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
         </p>
       );
     } else {
       return (
         <p key={cat.name}>
           {cat.name}&nbsp;&nbsp;
-          <i className="yellow star icon"></i>
+          <i className="yellow small star icon"></i>
         </p>
       );
     }
@@ -101,7 +101,7 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
 
   function showCollectors(artwork) {
     setCategoryList([]);
-    fetch(`http://localhost:9393/artworks/${artwork.id}`)
+    fetch(`https://limitless-reaches-06090.herokuapp.com/artworks/${artwork.id}`)
       .then((resp) => resp.json())
       .then((data) => {
         setCollectorList(data.collector_list);
@@ -111,7 +111,7 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
 
   function showCategories(artwork) {
     setCollectorList([]);
-    fetch(`http://localhost:9393/artworks/${artwork.id}/showcategories`)
+    fetch(`https://limitless-reaches-06090.herokuapp.com/artworks/${artwork.id}/showcategories`)
       .then((resp) => resp.json())
       .then((data) => {
         setCategoryList(data.cat_popularity);
@@ -149,7 +149,7 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
         date_created: parseInt(formData.date_created),
       }),
     };
-    fetch("http://localhost:9393/artworks", configObj)
+    fetch("https://limitless-reaches-06090.herokuapp.com/artworks", configObj)
       .then((resp) => resp.json())
       .then((data) => {
         onAddNew(data);

@@ -23,7 +23,7 @@ function App() {
   }
 
   function onDelete(artwork) {
-    fetch(`http://localhost:9393/artworks/${artwork.id}`, {
+    fetch(`https://limitless-reaches-06090.herokuapp.com/artworks/${artwork.id}`, {
       method: "DELETE",
     });
     const deletedArtworks = artworks.filter((a) => a.id !== artwork.id);
@@ -32,7 +32,7 @@ function App() {
 
   return (
     <div>
-      <NavBar />
+      <NavBar/>
       <Route exact path="/artworks">
         <ArtworkPage
           artworks={artworks}

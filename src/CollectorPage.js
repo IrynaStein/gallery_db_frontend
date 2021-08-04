@@ -37,7 +37,7 @@ function CollectorPage({artworks}) {
   ))
 
   useEffect(() => {
-    fetch("http://localhost:9393/collectors")
+    fetch("https://limitless-reaches-06090.herokuapp.com/collectors")
       .then((resp) => resp.json())
       .then((data) => {
         setCollectors(data.collectors);
@@ -69,7 +69,7 @@ function CollectorPage({artworks}) {
       }),
     };
     console.log(configObj)
-    fetch("http://localhost:9393/collectors", configObj)
+    fetch("https://limitless-reaches-06090.herokuapp.com/collectors", configObj)
       .then((resp) => resp.json())
       .then((data) => setCollectors([...collectors, data.collector]));
     setFormData(defaultForm);
@@ -77,10 +77,14 @@ function CollectorPage({artworks}) {
 
   const searchedCollectors = collectors
     .filter(
-      (collector) =>
-        collector.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (collector) => {
+      if (searchTerm === "all"){
+        return collectors
+      } else {
+        return collector.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         collector.last_name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+      }   
+      })
     .map((collector) => (
       <Collector
         collector={collector}
@@ -91,7 +95,7 @@ function CollectorPage({artworks}) {
     ));
 
   function showArtworks(collector) {
-    fetch(`http://localhost:9393/collectors/${collector.id}`)
+    fetch(`https://limitless-reaches-06090.herokuapp.com/collectors/${collector.id}`)
       .then((resp) => resp.json())
       .then((data) => {
         setCollectorArtworks(data.artworks);
@@ -108,7 +112,7 @@ function CollectorPage({artworks}) {
   ));
 
   function onCollectorDelete(coll) {
-    fetch(`http://localhost:9393/collectors/${coll.id}`, {
+    fetch(`https://limitless-reaches-06090.herokuapp.com/collectors/${coll.id}`, {
       method: "DELETE",
     });
     const deletedCollectors = collectors.filter((c) => c.id !== coll.id);
@@ -250,7 +254,7 @@ function CollectorPage({artworks}) {
                     Artworks in this collection: {mappedArtworksByCollector}
                   </div>
                 ) : (
-                  "Choose a collector to see more details"
+                  `Choose a collector to see more details or type "all" to see an entire list`
                 )}
               </div>
             </div>
