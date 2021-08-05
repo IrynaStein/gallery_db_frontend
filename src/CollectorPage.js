@@ -78,7 +78,7 @@ function CollectorPage({artworks}) {
   const searchedCollectors = collectors
     .filter(
       (collector) => {
-      if (searchTerm === "all"){
+      if (searchTerm.toLowerCase() === "all"){
         return collectors
       } else {
         return collector.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
