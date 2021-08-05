@@ -100,12 +100,12 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
     </option>
   ));
 
-  function capitalizeS(string) {
-    string
-      .split(" ")
-      .map((e) => e.slice(0, 1).toUpperCase() + e.slice(1).toLowerCase())
-      .join(" ");
-  }
+  // function capitalizeS(string) {
+  //   string
+  //     .split(" ")
+  //     .map((e) => e.slice(0, 1).toUpperCase() + e.slice(1).toLowerCase())
+  //     .join(" ");
+  // }
 
   function showCollectors(artwork) {
     setCategoryList([]);
