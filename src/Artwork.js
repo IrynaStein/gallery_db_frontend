@@ -1,5 +1,7 @@
-function Artwork({ artwork, onDelete, showCollectors, showCategories }) {
+
+function Artwork({ artwork, onDelete, showCollectors, showCategories, handleEdit }) {
   const {
+    id,
     image,
     title,
     medium,
@@ -17,7 +19,7 @@ function Artwork({ artwork, onDelete, showCollectors, showCategories }) {
         <img className="ui small image" src={image} alt="artwork" />
         <div className="content">
           <p className="header" style={{ color: "rgba(33, 133, 208, 100)" }}>
-            {title}
+            {title}&nbsp;&nbsp;<span className="meta" style={{fontSize: "12px"}}>id:{id}</span>
           </p>
           <div className="meta">
             <p>
@@ -40,11 +42,12 @@ function Artwork({ artwork, onDelete, showCollectors, showCategories }) {
               onClick={() => onDelete(artwork)}
             ></i>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            {/* <i
+            <i
               className="blue edit outline icon"
               style={{ cursor: "pointer" }}
+              onClick={() => handleEdit(artwork)}
             ></i>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <i
               className="blue users icon"
               style={{ cursor: "pointer" }}

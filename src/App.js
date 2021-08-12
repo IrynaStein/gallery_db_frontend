@@ -22,6 +22,19 @@ function App() {
     setArtworks([...artworks, data.artwork]);
   }
 
+  function onEditArt(data){
+    console.log(data.artwork)
+    const updatedArtworks = artworks.map((artwork) => {
+      if (artwork.id === data.artwork.id){
+        return data.artwork
+      }
+      else {
+        return artwork
+      }
+    })
+    setArtworks(updatedArtworks)
+  }
+
   function onDelete(artwork) {
     fetch(`https://limitless-reaches-06090.herokuapp.com/artworks/${artwork.id}`, {
       method: "DELETE",
@@ -39,6 +52,7 @@ function App() {
           categories={categories}
           onAddNew={onAddNew}
           onDelete={onDelete}
+          onEditArt={onEditArt}
         />
       </Route>
       <Route exact path="/collectors">
