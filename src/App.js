@@ -10,7 +10,7 @@ function App() {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:9393/artworks")
+    fetch("https://limitless-reaches-06090.herokuapp.com/artworks")
       .then((resp) => resp.json())
       .then((data) => {
         setArtworks(data.artworks);
@@ -23,7 +23,7 @@ function App() {
   }
 
   function onDelete(artwork) {
-    fetch(`http://localhost:9393/artworks/${artwork.id}`, {
+    fetch(`https://limitless-reaches-06090.herokuapp.com/artworks/${artwork.id}`, {
       method: "DELETE",
     });
     const deletedArtworks = artworks.filter((a) => a.id !== artwork.id);
@@ -32,7 +32,7 @@ function App() {
 
   return (
     <div>
-      <NavBar />
+      <NavBar/>
       <Route exact path="/artworks">
         <ArtworkPage
           artworks={artworks}
@@ -42,7 +42,7 @@ function App() {
         />
       </Route>
       <Route exact path="/collectors">
-        <CollectorPage />
+        <CollectorPage artworks={artworks}/>
       </Route>
     </div>
   );

@@ -1,7 +1,8 @@
 import Collector from "./Collector";
+import { Input } from "semantic-ui-react";
 import { useEffect, useState } from "react";
 
-function CollectorPage() {
+function CollectorPage({artworks}) {
   const [collectors, setCollectors] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [collectorArtworks, setCollectorArtworks] = useState([]);
@@ -12,8 +13,8 @@ function CollectorPage() {
     email: "",
     address: "",
     phone: "",
-    art_id_1: 0,
-    art_id_2: 0,
+    art_id_1: "",
+    art_id_2: ""
   };
   const [formData, setFormData] = useState(defaultForm);
 
@@ -31,8 +32,12 @@ function CollectorPage() {
     <Collector collector={collector} key={collector.id} />
   ));
 
+  const mappedArtworks = artworks.map((aw) => (
+    <option key={aw.id} value={aw.title}>{aw.title}</option>
+  ))
+
   useEffect(() => {
-    fetch("http://localhost:9393/collectors")
+    fetch("https://limitless-reaches-06090.herokuapp.com/collectors")
       .then((resp) => resp.json())
       .then((data) => {
         setCollectors(data.collectors);
@@ -49,6 +54,7 @@ function CollectorPage() {
 
   function handleSubmit(e) {
     e.preventDefault();
+
     console.log("hello");
     const configObj = {
       method: "POST",
@@ -59,11 +65,11 @@ function CollectorPage() {
         email: formData.email,
         address: formData.address,
         phone: formData.phone,
-        art_id_1: parseInt(formData.art_id_1),
-        art_id_2: parseInt(formData.art_id_2),
+        art_id: [formData.art_id_1, formData.art_id_2]
       }),
     };
-    fetch("http://localhost:9393/collectors", configObj)
+    console.log(configObj)
+    fetch("https://limitless-reaches-06090.herokuapp.com/collectors", configObj)
       .then((resp) => resp.json())
       .then((data) => setCollectors([...collectors, data.collector]));
     setFormData(defaultForm);
@@ -71,10 +77,14 @@ function CollectorPage() {
 
   const searchedCollectors = collectors
     .filter(
-      (collector) =>
-        collector.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (collector) => {
+      if (searchTerm.toLowerCase() === "all"){
+        return collectors
+      } else {
+        return collector.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         collector.last_name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+      }   
+      })
     .map((collector) => (
       <Collector
         collector={collector}
@@ -85,7 +95,7 @@ function CollectorPage() {
     ));
 
   function showArtworks(collector) {
-    fetch(`http://localhost:9393/collectors/${collector.id}`)
+    fetch(`https://limitless-reaches-06090.herokuapp.com/collectors/${collector.id}`)
       .then((resp) => resp.json())
       .then((data) => {
         setCollectorArtworks(data.artworks);
@@ -102,7 +112,7 @@ function CollectorPage() {
   ));
 
   function onCollectorDelete(coll) {
-    fetch(`http://localhost:9393/collectors/${coll.id}`, {
+    fetch(`https://limitless-reaches-06090.herokuapp.com/collectors/${coll.id}`, {
       method: "DELETE",
     });
     const deletedCollectors = collectors.filter((c) => c.id !== coll.id);
@@ -178,27 +188,31 @@ function CollectorPage() {
                 />
               </div>
             </div>
-            <div className="five fields">
-              <div className="field">
-                <label>Artwork ID*</label>
-                <input
-                  onChange={(e) => handleFormChange(e)}
-                  placeholder="artwork id#1"
-                  type="number"
-                  name="art_id_1"
-                  value={formData.art_id_1}
-                />
-              </div>
-              <div className="field">
-                <label>Artwork ID*</label>
-                <input
-                  onChange={(e) => handleFormChange(e)}
-                  placeholder="artwork id#2"
-                  type="number"
-                  name="art_id_2"
-                  value={formData.art_id_2}
-                />
-              </div>
+             <div className="two fields">
+            <div className="field">
+            <label>Artwork owned *</label>
+            <Input list="artworks" 
+              placeholder="Choose artwork..." 
+              id="art_id_1"
+              name="art_id_1"
+              onChange={(e)=>handleFormChange(e)}
+              />
+              <datalist id="artworks">
+              {mappedArtworks}
+              </datalist>
+            </div>
+            <div className="field">
+            <label>Artwork owned *</label>
+              <Input list="artworks" 
+              placeholder="Choose artwork..." 
+              id="art_id_2"
+              name="art_id_2"
+              onChange={(e)=>handleFormChange(e)}
+              />
+              <datalist id="artworks">
+              {mappedArtworks}
+              </datalist>
+            </div>
             </div>
             <button className="ui submit button">Submit</button>
           </form>
@@ -236,11 +250,11 @@ function CollectorPage() {
 
               <div className="ui left aligned inverted segment">
                 {collectorArtworks.length > 0 ? (
-                  <p>
+                  <div>
                     Artworks in this collection: {mappedArtworksByCollector}
-                  </p>
+                  </div>
                 ) : (
-                  "Choose a collector to see more details"
+                  `Choose a collector to see more details or type "all" to see an entire list`
                 )}
               </div>
             </div>

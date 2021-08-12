@@ -6,6 +6,7 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
   const [collectorList, setCollectorList] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
   const [currentArtwork, setCurrentArtwork] = useState({});
+  const [modal, setModal] = useState(false);
 
   const defaultForm = {
     title: "",
@@ -49,45 +50,45 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
       return (
         <p key={cat.name}>
           {cat.name}&nbsp;&nbsp;
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
         </p>
       );
     } else if (ind === 1) {
       return (
         <p key={cat.name}>
           {cat.name}&nbsp;&nbsp;
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
         </p>
       );
     } else if (ind === 2) {
       return (
         <p key={cat.name}>
           {cat.name}&nbsp;&nbsp;
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
         </p>
       );
     } else if (ind === 3) {
       return (
         <p key={cat.name}>
           {cat.name}&nbsp;&nbsp;
-          <i className="yellow star icon"></i>
-          <i className="yellow star icon"></i>
+          <i className="yellow small star icon"></i>
+          <i className="yellow small star icon"></i>
         </p>
       );
     } else {
       return (
         <p key={cat.name}>
           {cat.name}&nbsp;&nbsp;
-          <i className="yellow star icon"></i>
+          <i className="yellow small star icon"></i>
         </p>
       );
     }
@@ -99,9 +100,18 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
     </option>
   ));
 
+  // function capitalizeS(string) {
+  //   string
+  //     .split(" ")
+  //     .map((e) => e.slice(0, 1).toUpperCase() + e.slice(1).toLowerCase())
+  //     .join(" ");
+  // }
+
   function showCollectors(artwork) {
     setCategoryList([]);
-    fetch(`http://localhost:9393/artworks/${artwork.id}`)
+    fetch(
+      `https://limitless-reaches-06090.herokuapp.com/artworks/${artwork.id}`
+    )
       .then((resp) => resp.json())
       .then((data) => {
         setCollectorList(data.collector_list);
@@ -111,7 +121,9 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
 
   function showCategories(artwork) {
     setCollectorList([]);
-    fetch(`http://localhost:9393/artworks/showcategories/${artwork.id}`)
+    fetch(
+      `https://limitless-reaches-06090.herokuapp.com/artworks/${artwork.id}/showcategories`
+    )
       .then((resp) => resp.json())
       .then((data) => {
         setCategoryList(data.cat_popularity);
@@ -120,7 +132,17 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
   }
 
   function handleChange(e) {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === "title") {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value
+          .split(" ")
+          .map((e) => e.charAt(0).toUpperCase() + e.substring(1).toLowerCase())
+          .join(" "),
+      });
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
   }
 
   function handleChecked(e) {
@@ -133,32 +155,41 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    const configObj = {
-      method: "POST",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify({
-        title: formData.title,
-        edition: parseInt(formData.edition),
-        likes: parseInt(formData.likes),
-        price: parseInt(formData.price),
-        medium: formData.medium,
-        image: formData.image,
-        featured: formData.featured,
-        category: formData.category,
-        date_created: parseInt(formData.date_created),
-      }),
-    };
-    fetch("http://localhost:9393/artworks", configObj)
-      .then((resp) => resp.json())
-      .then((data) => {
-        onAddNew(data);
-      });
+    console.log(formData.category);
+    if (formData.category === "") {
+      setModal((mUV) => !mUV);
+    } else {
+      const configObj = {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({
+          title: formData.title,
+          edition: parseInt(formData.edition),
+          likes: parseInt(formData.likes),
+          price: parseInt(formData.price),
+          medium: formData.medium,
+          image: formData.image,
+          featured: formData.featured,
+          category: formData.category,
+          date_created: parseInt(formData.date_created),
+        }),
+      };
+      console.log(configObj);
+      fetch("https://limitless-reaches-06090.herokuapp.com/artworks", configObj)
+        .then((resp) => resp.json())
+        .then((data) => {
+          onAddNew(data);
+        });
+    }
     setFormData(defaultForm);
   }
 
   return (
     <div className="ui segment">
+      <div className={modal ? "ui orange message" : "ui hidden message"}>
+        Category can't be empty
+        <i className="close icon" onClick={() => setModal(false)}></i>
+      </div>
       <div className="ui two column stakable grid">
         <div className="ui vertical divider">
           <i className="list ul icon"></i>
@@ -311,8 +342,7 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
                 category
               </b>
               <p />
-              <p>Categories popularity breakdown below:</p>{" "}
-              <p>{mappedCategories}</p>
+              <p>Categories popularity breakdown below:</p> {mappedCategories}
             </div>
           ) : null}
         </div>
