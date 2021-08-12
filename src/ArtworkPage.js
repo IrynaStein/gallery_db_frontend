@@ -28,6 +28,7 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
       onDelete={onDelete}
       showCollectors={showCollectors}
       showCategories={showCategories}
+      handleEdit={handleEdit}
     />
   ));
 
@@ -99,13 +100,7 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
       {category.name}
     </option>
   ));
-
-  // function capitalizeS(string) {
-  //   string
-  //     .split(" ")
-  //     .map((e) => e.slice(0, 1).toUpperCase() + e.slice(1).toLowerCase())
-  //     .join(" ");
-  // }
+console.log(formData.category)
 
   function showCollectors(artwork) {
     setCategoryList([]);
@@ -159,30 +154,63 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
     if (formData.category === "") {
       setModal((mUV) => !mUV);
     } else {
-      const configObj = {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({
-          title: formData.title,
-          edition: parseInt(formData.edition),
-          likes: parseInt(formData.likes),
-          price: parseInt(formData.price),
-          medium: formData.medium,
-          image: formData.image,
-          featured: formData.featured,
-          category: formData.category,
-          date_created: parseInt(formData.date_created),
-        }),
-      };
-      console.log(configObj);
-      fetch("https://limitless-reaches-06090.herokuapp.com/artworks", configObj)
-        .then((resp) => resp.json())
-        .then((data) => {
-          onAddNew(data);
-        });
+      if (!formData.id){
+        const configObj = {
+          method: "POST",
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify({
+            title: formData.title,
+            edition: parseInt(formData.edition),
+            likes: parseInt(formData.likes),
+            price: parseInt(formData.price),
+            medium: formData.medium,
+            image: formData.image,
+            featured: formData.featured,
+            category: formData.category,
+            date_created: parseInt(formData.date_created),
+          }),
+        };
+        console.log(configObj);
+        fetch("https://limitless-reaches-06090.herokuapp.com/artworks", configObj)
+          .then((resp) => resp.json())
+          .then((data) => {
+            onAddNew(data);
+          });
+      }
+      else {
+        console.log("Patch is coming through")
+        const configObj2 = {
+          method: "PATCH",
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify({
+            title: formData.title,
+            edition: parseInt(formData.edition),
+            likes: parseInt(formData.likes),
+            price: parseInt(formData.price),
+            medium: formData.medium,
+            image: formData.image,
+            featured: formData.featured,
+            category: formData.category,
+            date_created: parseInt(formData.date_created),
+          }),
+        };
+        console.log(configObj2);
+        fetch(`https://limitless-reaches-06090.herokuapp.com/artworks/${formData.id}/update`, configObj2)
+          .then((resp) => resp.json())
+          .then((data) => {
+            console.log(data);
+          });
+      }
     }
     setFormData(defaultForm);
   }
+
+  function handleEdit(artwork) {
+    console.log(artwork);
+    console.log(artwork.category);
+    setFormData(artwork)
+  }
+console.log(formData)
 
   return (
     <div className="ui segment">
@@ -278,9 +306,9 @@ function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
             <div className="field">
               <div className="ui toggle checkbox">
                 <input
-                  onClick={(e) => handleChecked(e)}
+                  onChange={(e) => handleChecked(e)}
                   type="checkbox"
-                  value={formData.featured}
+                  checked={formData.featured}
                 />
                 <label style={{ fontSize: "10px" }}>
                   <b>Featured</b>

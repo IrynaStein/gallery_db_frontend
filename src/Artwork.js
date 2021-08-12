@@ -1,4 +1,4 @@
-function Artwork({ artwork, onDelete, showCollectors, showCategories }) {
+function Artwork({ artwork, onDelete, showCollectors, showCategories, handleEdit }) {
   const {
     image,
     title,
@@ -40,11 +40,12 @@ function Artwork({ artwork, onDelete, showCollectors, showCategories }) {
               onClick={() => onDelete(artwork)}
             ></i>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            {/* <i
+            <i
               className="blue edit outline icon"
               style={{ cursor: "pointer" }}
+              onClick={() => handleEdit(artwork)}
             ></i>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <i
               className="blue users icon"
               style={{ cursor: "pointer" }}
