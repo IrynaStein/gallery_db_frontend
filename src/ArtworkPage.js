@@ -2,7 +2,7 @@ import { useState } from "react";
 import Artwork from "./Artwork";
 // import { NavLink } from "react-router-dom";
 
-function ArtworksPage({ artworks, categories, onAddNew, onDelete }) {
+function ArtworksPage({ artworks, categories, onAddNew, onDelete, onEditArt }) {
   const [collectorList, setCollectorList] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
   const [currentArtwork, setCurrentArtwork] = useState({});
@@ -198,7 +198,7 @@ console.log(formData.category)
         fetch(`https://limitless-reaches-06090.herokuapp.com/artworks/${formData.id}/update`, configObj2)
           .then((resp) => resp.json())
           .then((data) => {
-            console.log(data);
+            onEditArt(data);
           });
       }
     }
